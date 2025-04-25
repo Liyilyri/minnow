@@ -3,6 +3,9 @@
 #include <cstdint>
 #include <string>
 #include <string_view>
+#include <queue>
+
+using std::queue;
 
 class Reader;
 class Writer;
@@ -20,10 +23,18 @@ public:
 
   void set_error() { error_ = true; };       // Signal that the stream suffered an error.
   bool has_error() const { return error_; }; // Has the stream had an error?
+  
+  bool is_closed() const { return closed_; } ;
+
 
 protected:
   // Please add any additional state to the ByteStream here, and not to the Writer and Reader interfaces.
+  queue<char> mem;
   uint64_t capacity_;
+  uint64_t cur_data_len;
+  uint64_t total_pushed_data;
+  uint64_t total_poped_data;
+  bool closed_ {};
   bool error_ {};
 };
 
